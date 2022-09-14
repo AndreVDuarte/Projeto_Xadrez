@@ -7,12 +7,25 @@ import chess.pieces.King;
 import chess.pieces.Rook;
 
 public class ChessMatch {
+    
+    private int turn;
+    private Color currentPlayer;
     private Board board;
 
     public ChessMatch() {
         this.board = new Board(8,8);
+        turn = 1;
+        currentPlayer = Color.WHITE;
         initialSetup();
     }
+
+    public Color getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public int getTurn() {
+        return turn;
+    }   
     
     public ChessPiece[][] getPieces(){
         ChessPiece[][] mat = new ChessPiece[board.getRows()][board.getColumns()];
@@ -39,6 +52,7 @@ public class ChessMatch {
         validateTargetPosition(source, target);
         
         Piece capturedPiece = makeMove(source, target);
+        nextTurn();
         return (ChessPiece)capturedPiece;
     }
     
@@ -54,10 +68,13 @@ public class ChessMatch {
         if (!board.thereIsAPiece(position)){
             throw new ChessException("Nao existe peca nesta posicao");
         }
-        
+        if (currentPlayer != ((ChessPiece)board.piece(position)).getColor()){
+            throw new ChessException("A peca escolhida nao e sua.");
+        }
         if (!board.piece(position).isThereAnyPossibleMove()){
             throw new ChessException("Nao existe movimentos possiveis para a peca escolhida.");
         }
+       
         
     }
     
@@ -86,5 +103,10 @@ public class ChessMatch {
         placeNewPiece('e', 7, new Rook(board, Color.BLACK));
         placeNewPiece('e', 8, new Rook(board, Color.BLACK));
         placeNewPiece('d', 8, new King(board, Color.BLACK));
+    }
+    
+    private void nextTurn(){
+        turn ++;
+        currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
     }
 }
