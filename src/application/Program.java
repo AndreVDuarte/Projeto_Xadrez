@@ -44,6 +44,10 @@ public class Program {
                 if (chessMatch.getPromoted() != null){
                     System.out.print("Informe a peca para promocao (B/C/T/r): ");
                     String type = sc.nextLine();
+                    while (!type.equals("B") && !type.equals("C") && !type.equals("T") &&!type.equals("r")){
+                        System.out.print("Valor invalido. Informe a peca para promocao (B/C/T/r): ");
+                        type = sc.nextLine();
+                    }
                     chessMatch.replacePromotedPiece(type);
                 }
             }
